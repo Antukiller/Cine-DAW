@@ -16,40 +16,50 @@ Crear una solución modular que gestione una sala de cine mediante matrices, gar
   - Filas: entre **4 y 7**
   - Columnas: entre **5 y 9**
   - Formato correcto: `Número:Numero` (ej. `5:8`)
-- Ejemplo de interacción:
-Bienvenido a CINEMAD. ERROR: Faltan argumentos. Formato de ejecución: -filas:X -columnas:Y
---- Modo Consola de Respaldo ---
-Introduzca las dimensiones de la sala (F:C). Rango permitido: [4-7]:[5-9]
 
+#### ✅ Ejemplos de Interacción
+
+
+
+
+---
 
 ### 2. 🎟️ Representación de Butacas
 
 Cada butaca tiene un estado y un precio fijo:
 
-| Estado           | Valor Interno | Símbolo | Precio     |
-|------------------|---------------|---------|------------|
-| Libre            | 0             | [🟢]    | N/A        |
-| Ocupada          | 1             | [🔴]    | 6,50€      |
-| Fuera de servicio| 2             | [🚫]    | N/A        |
+| Estado             | Valor Interno | Símbolo | Precio |
+|--------------------|---------------|---------|--------|
+| Libre              | 0             | [🟢]    | 6,50€  |
+| Ocupada            | 1             | [🔴]    | 6,50€  |
+| Fuera de servicio  | 2             | [🚫]    | N/A    |
 
 - Al iniciar, todas las butacas están libres excepto entre 1 y 3 que se marcan aleatoriamente como fuera de servicio.
+
+---
 
 ### 3. 🗺️ Visualización de la Sala
 
 - Coordenadas mixtas: **Filas con letras (A, B, C...)** y **Columnas con números (1, 2, 3...)**
-- Ejemplo de salida:
-1 2 3 4 5 A [🟢] [🟢] [🔴] [🟢] [🟢] B [🚫] [🟢] [🟢] [🟢] [🔴] C [🟢] [🟢] [🔴] [🚫] [🟢]
 
+#### Ejemplo de salida:
+
+
+
+---
 
 ### 4. 🎯 Entrada de Coordenadas
 
 - Formato requerido: `Letra:Numero` (ej. `B:3`)
 - Validaciones:
-- Formato correcto
-- Coordenada dentro de los límites
-- Ejemplo de errores:
-- `A-5` → ❌ ERROR: Formato incorrecto
-- `Z:9` → ❌ ERROR: Coordenada fuera de los límites
+  - Formato correcto
+  - Coordenada dentro de los límites
+
+#### Ejemplos de interacción:
+
+
+
+---
 
 ### 5. 📋 Menú Principal
 
@@ -64,6 +74,13 @@ El programa opera en un bucle con las siguientes opciones:
 | 5      | Informe             | Muestra estadísticas completas |
 | 6      | Salir               | Finaliza el programa |
 
+#### Ejemplos de acciones:
+
+
+
+
+---
+
 ### 6. 📊 Informe Estadístico
 
 La opción 5 genera un informe con:
@@ -74,8 +91,7 @@ La opción 5 genera un informe con:
 - Porcentaje de Ocupación
 - Recaudación Total
 
-Ejemplo de salida:
---- INFORME CINEMAD --- Entradas Vendidas: 5 Asientos Libres: 18 Asientos No Disponibles (F/S): 2 Ocupación: 21.74% (sobre 23 asientos disponibles) Recaudación Total: 32.50€
+#### Ejemplo de salida:
 
 
 
