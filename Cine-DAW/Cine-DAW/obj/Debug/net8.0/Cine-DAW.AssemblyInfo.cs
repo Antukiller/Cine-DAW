@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Cine-DAW")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+94cf74f0672baf5542e300631cfc8eede4d51c59")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+02fd25b517e0ae8b3c5ad6d7fdc8b37876704d39")]
 [assembly: System.Reflection.AssemblyProductAttribute("Cine-DAW")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Cine-DAW")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,8 +2,6 @@
 using System.Text.RegularExpressions;
 
 
-using System;
-using System.Text.RegularExpressions;
 
 var random = new Random();
 Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -53,12 +51,11 @@ for (int k = 0; k < cantidadFueraServicio; k++) {
     sala[filaAleatoria, columnaAleatoria] = Butaca.FueraDeServicio;
 }
 
+mostrarMenuPrincipal(sala);
 
 
-// 5. Finalización
-Console.WriteLine("\n👋 Gracias por usar Cine-DAM. Presiona una tecla para salir...");
-Console.ReadKey();
-return;
+
+
 
 // ----------------------------------------------------
 // FUNCIONES Y PROCEDIMIENTOS AUXILIARES
@@ -83,52 +80,28 @@ Configuracion ValidarArgumentos(string[] args) {
         Columnas = columnasParsed
     };
 }
+
 Configuracion PedirConfiguracion() {
-    Console.WriteLine("-- Configuracion");
+    Console.WriteLine("-- Configuración manual");
     var regex = new Regex("^[4-7]{1}:[5-9]{1}$");
     var input = (Console.ReadLine() ?? "").Trim();
     while (!regex.IsMatch(input)) {
-        Console.WriteLine("Error: Entrada inválida. Inténtalo de nuevo. Formato correcto: Fila 4-7 Columnas 5-9]");
+        Console.WriteLine("❌ Error: Entrada inválida. Inténtalo de nuevo. Formato correcto: Fila 4-7 Columnas 5-9");
         input = (Console.ReadLine() ?? "").Trim();
     }
-    var match = regex.Match(input);
-    var filas = int.Parse(args[0]);
-    var columnas = int.Parse(args[1]);
+
+    var partes = input.Split(':');
+    var filas = int.Parse(partes[0]);
+    var columnas = int.Parse(partes[1]);
+
     return new Configuracion {
         Filas = filas,
         Columnas = columnas
     };
 }
 
-
-
-
-struct Configuracion {
-    public int Filas;
-    public int Columnas;
-}
-struct Posicion {
-    public int Fila;
-    public int Columna;
-}
-
-enum Butaca {
-    Libre,
-    Ocupada,
-    FueraDeServicio
-}
-
-
-
-enum Menú {
-    VerSala,
-    ComprarEntrada,
-    DevolverEntrada,
-    Recaudación, 
-    Informe, 
-    Salir
-}
-
+   
+    
 
 void mostrarMenuPrincipal(Butaca[,] sala) {
     int opcion = 0;
@@ -169,7 +142,8 @@ void mostrarMenuPrincipal(Butaca[,] sala) {
                 break;
 
             case Menú.Recaudación:
-                calcularRecaudacion(sala);
+                double totalRecaudado = calcularRecaudacion(sala);
+                Console.WriteLine($"💰 Recaudación total: {totalRecaudado.ToString("F2")} €");
                 break;
 
             case Menú.Informe:
@@ -253,77 +227,96 @@ bool hayButacaLibre(Butaca[,] sala) {
 
 void comprarEntrada(Butaca[,] sala) {
     if (!hayButacaLibre(sala)) {
-        Console.WriteLine("No Hay butacas libres");
+        Console.WriteLine("❌ No hay butacas libres");
         return;
     }
 
-    Console.WriteLine("Ingrese una butaca con el formato Letra:Número (por ejemplo: B:3)");
+    Console.WriteLine("Ingrese una butaca con el formato Letra:Número (por ejemplo: B:3) o escriba 'salir' para cancelar:");
+    var regex = new Regex(@"^([A-G]):(\d+)$");
 
+    while (true) {
+        var inputRaw = (Console.ReadLine() ?? "").Trim();
+        var input = inputRaw.ToLower();
 
-    var regex = new Regex (@"^([A-G]):(\d+)$");
-    var input = (Console.ReadLine() ?? "");
-    while(!regex.IsMatch(input)) {
-        Console.WriteLine("❌Error: formato incorrecto, vuelva a intentarlo");
-        input = (Console.ReadLine() ?? "").Trim();
+        if (input == "salir") {
+            Console.WriteLine("🚪 Operación cancelada. Volviendo al menú...");
+            return;
+        }
+
+        if (!regex.IsMatch(inputRaw)) {
+            Console.WriteLine("❌ Formato incorrecto. Intente nuevamente o escriba 'salir' para cancelar.");
+            continue;
+        }
+
+        var match = regex.Match(inputRaw);
+        var fila = obtenerIndiceFila(match.Groups[1].Value);
+        var columna = int.Parse(match.Groups[2].Value) - 1;
+
+        if (fila < 0 || fila >= sala.GetLength(0) || columna < 0 || columna >= sala.GetLength(1)) {
+            Console.WriteLine("❌ Posición fuera de rango. Intente nuevamente.");
+            continue;
+        }
+
+        if (sala[fila, columna] == Butaca.FueraDeServicio) {
+            Console.WriteLine("🚫 La butaca está fuera de servicio. Elija otra.");
+            continue;
+        }
+
+        if (sala[fila, columna] == Butaca.Ocupada) {
+            Console.WriteLine("❌ La butaca ya está ocupada. Elija otra.");
+            continue;
+        }
+
+        ocuparButaca(sala, new Posicion { Fila = fila, Columna = columna });
+        break;
     }
-
-    var match = regex.Match(input);
-    var fila = obtenerIndiceFila(match.Groups[1].Value);
-    var columna = int.Parse(match.Groups[2].Value);
-
-    columna -= 1;
-
-    if (fila < 0 || fila >= sala.GetLength(0) || columna < 0 || columna >= sala.GetLength(1)) {
-        Console.WriteLine("❌ Posición fuera de rango");
-        return;
-    }
-
-    if (sala[fila, columna] != Butaca.Libre) {
-        Console.WriteLine("❌ La butaca no está disponible");
-        return;
-    }
-
-    ocuparButaca(sala, new Posicion{Fila = fila, Columna = columna});
-
-
 }
+
 
 void devolverEntrada(Butaca[,] sala) {
-    if (hayButacaLibre(sala)) {
-        Console.WriteLine("Hay butacas libres");
-        return;
-    }
-    
-    Console.WriteLine("Ingrese la butaca que quiere deolver con el formato Letra:Número (por ejemplo: B:3)");
+    Console.WriteLine("Ingrese la butaca que quiere devolver con el formato Letra:Número (por ejemplo: B:3) o escriba 'salir' para cancelar:");
     var regex = new Regex(@"^([A-G]):(\d+)$");
-    var input = (Console.ReadLine() ?? "").Trim();
-    while (!regex.IsMatch(input)) {
-        Console.WriteLine("❌Error: formato incorrecto, vuelva a intentarlo");
-        input = (Console.ReadLine() ?? "").Trim();
-    }
-    
-    var match = regex.Match(input);
-    var fila = obtenerIndiceFila(match.Groups[1].Value);
-    var columna = int.Parse(match.Groups[2].Value);
-    
-    columna -= 1;
-    if (fila < 0 || fila >= sala.GetLength(0) || columna < 0 || columna >= sala.GetLength(1)) {
-        Console.WriteLine("❌ Posición fuera de rango");
-        return;
-    }
 
-    if (sala[fila, columna] == Butaca.Libre) {
-        Console.WriteLine("❌ No hay entrada que devolver. La butaca ya está libre.");
-    } else if (sala[fila, columna] == Butaca.Ocupada) {
+    while (true) {
+        var inputRaw = (Console.ReadLine() ?? "").Trim();
+        var input = inputRaw.ToLower();
+
+        if (input == "salir") {
+            Console.WriteLine("🚪 Operación cancelada. Volviendo al menú...");
+            return;
+        }
+
+        if (!regex.IsMatch(inputRaw)) {
+            Console.WriteLine("❌ Formato incorrecto. Intente nuevamente o escriba 'salir' para cancelar.");
+            continue;
+        }
+
+        var match = regex.Match(inputRaw);
+        var letra = match.Groups[1].Value.ToUpper(); // ← Aseguramos mayúscula
+        var fila = obtenerIndiceFila(letra);
+        var columna = int.Parse(match.Groups[2].Value) - 1;
+
+        if (fila < 0 || fila >= sala.GetLength(0) || columna < 0 || columna >= sala.GetLength(1)) {
+            Console.WriteLine("❌ Posición fuera de rango. Intente nuevamente.");
+            continue;
+        }
+
+        if (sala[fila, columna] == Butaca.FueraDeServicio) {
+            Console.WriteLine("🚫 Esta butaca está fuera de servicio. No se puede devolver.");
+            continue;
+        }
+
+        if (sala[fila, columna] == Butaca.Libre) {
+            Console.WriteLine("❌ No hay entrada que devolver. La butaca ya está libre.");
+            continue;
+        }
+
         sala[fila, columna] = Butaca.Libre;
         Console.WriteLine("✅ Entrada devuelta con éxito.");
-    } else if (sala[fila, columna] == Butaca.FueraDeServicio) {
-        Console.WriteLine("Esta butaca está fuera de servivio, por favor eliga otra");
-    }
-    else {
-        Console.WriteLine("Entrada no valida");
+        break;
     }
 }
+
 
 
 double calcularRecaudacion(Butaca[,] sala) {
@@ -354,9 +347,6 @@ void verInforme(Butaca[,] sala) {
             } else if (sala[i, j] == Butaca.FueraDeServicio) {
                 contadorFueraDeServicio++;
             }
-            else {
-                Console.WriteLine("No hay mas butacas");
-            }
         }
     }
     
@@ -386,7 +376,28 @@ void verInforme(Butaca[,] sala) {
 }
 
 
+struct Configuracion {
+    public int Filas;
+    public int Columnas;
+}
+struct Posicion {
+    public int Fila;
+    public int Columna;
+}
+
+enum Butaca {
+    Libre,
+    Ocupada,
+    FueraDeServicio
+}
 
 
 
-
+enum Menú {
+    VerSala,
+    ComprarEntrada,
+    DevolverEntrada,
+    Recaudación, 
+    Informe, 
+    Salir
+}

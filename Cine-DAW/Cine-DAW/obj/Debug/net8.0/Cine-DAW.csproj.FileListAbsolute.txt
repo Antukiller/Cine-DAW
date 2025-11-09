@@ -1,0 +1,15 @@
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\bin\Debug\net8.0\Cine-DAW.exe
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\bin\Debug\net8.0\Cine-DAW.deps.json
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\bin\Debug\net8.0\Cine-DAW.runtimeconfig.json
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\bin\Debug\net8.0\Cine-DAW.dll
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\bin\Debug\net8.0\Cine-DAW.pdb
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.AssemblyInfoInputs.cache
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.AssemblyInfo.cs
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.csproj.CoreCompileInputs.cache
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.sourcelink.json
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.dll
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\refint\Cine-DAW.dll
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.pdb
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\Cine-DAW.genruntimeconfig.cache
+C:\Users\antoi\RiderProjects\Cine-DAW\Cine-DAW\Cine-DAW\obj\Debug\net8.0\ref\Cine-DAW.dll
