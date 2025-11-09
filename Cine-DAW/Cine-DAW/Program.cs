@@ -2,76 +2,118 @@
 using System.Text.RegularExpressions;
 
 
+using System;
+using System.Text.RegularExpressions;
+
+var random = new Random();
+Console.OutputEncoding = System.Text.Encoding.UTF8;
+Console.Clear();
+
+// ----------------------------------------------------
+// BLOQUE PRINCIPAL (Top-Level Statements)
+// ----------------------------------------------------
+
+// **INICIO DEL PROGRAMA PRINCIPAL**
+
+Console.Clear();
+
+// 0. Validación de la entrada del tamaño de la sala por argumentos
+var configuracion = ValidarArgumentosEntrada(args);
+
+// 1. Presentación del sistema
+Console.WriteLine("=============================================");
+Console.WriteLine("     🎬 INICIANDO SISTEMA CINE-DAM 🎟️       ");
+Console.WriteLine("=============================================");
+Console.WriteLine("Parámetros de la sala:");
+Console.WriteLine($"\t- Filas: {configuracion.Fila}");
+Console.WriteLine($"\t- Columnas: {configuracion.Columna}");
+Console.WriteLine();
+
+// 2. Creación de la sala
+var sala = new Butaca[configuracion.Fila, configuracion.Columna];
+
+
+// 5. Finalización
+Console.WriteLine("\n👋 Gracias por usar Cine-DAM. Presiona una tecla para salir...");
+Console.ReadKey();
+return;
+
+// ----------------------------------------------------
+// FUNCIONES Y PROCEDIMIENTOS AUXILIARES
+// ----------------------------------------------------
+
 Configuracion ValidarArgumentosEntrada(string[] args) {
-    // Validamos que haya dos argumentos
-    if (args.Length != 2) {
-        Console.WriteLine("❌ Error: Debe ingresar dos argumentos: fila:X columna:Y");
+    if (args.Length != 2 || !args[0].StartsWith("fila:") || !args[1].StartsWith("columna:"))
+    {
+        Console.WriteLine("❌ Error: Debe ingresar dos argumentos con formato fila:X columna:Y");
         return PedirConfiguracion();
     }
 
-    // Validamos fila:X
-    var fila = args[0].Split(':');
-    if (fila.Length != 2 || !int.TryParse(fila[1], out var filaParsed) || filaParsed < 4 || filaParsed > 7) {
-        Console.WriteLine(
-            $"❌ Error: El argumento '{args[0]}' no es válido. Debe ser fila:X, donde X es un entero entre 4 y 7.");
+    var filaSplit = args[0].Split(':');
+    var columnaSplit = args[1].Split(':');
+
+    if (!int.TryParse(filaSplit[1], out var filaParsed) || filaParsed < 4 || filaParsed > 7)
+    {
+        Console.WriteLine("❌ Error: Fila fuera de rango [4-7]");
         return PedirConfiguracion();
     }
 
-    // Validamos columna:Y
-    var columna = args[1].Split(':');
-    if (columna.Length != 2 || !int.TryParse(columna[1], out var columnaParsed) || columnaParsed < 5 ||
-        columnaParsed > 9) {
-        Console.WriteLine(
-            $"❌ Error: El argumento '{args[1]}' no es válido. Debe ser columna:Y, donde Y es un entero entre 5 y 9.");
+    if (!int.TryParse(columnaSplit[1], out var columnaParsed) || columnaParsed < 5 || columnaParsed > 9)
+    {
+        Console.WriteLine("❌ Error: Columna fuera de rango [5-9]");
         return PedirConfiguracion();
     }
 
-    // Si todo es correcto, retornamos la configuración
     return new Configuracion {
         Fila = filaParsed,
         Columna = columnaParsed
     };
 }
 
-Configuracion PedirConfiguracion() {
-    Console.WriteLine("---Configuración del cine---");
-    Console.WriteLine("Por favor ingrese los parámetros fila y columna, de la siguiente forma: fila:X columna:Y");
+Configuracion PedirConfiguracion()
+{
+    Console.WriteLine("--- Configuración de la Sala ---");
+    Console.WriteLine("Ingrese los parámetros con el formato: fila:X columna:Y");
 
-    var regex = new Regex(@"^fila:(\d+)\s+columna:(\d+)$");
+    var regex = new Regex(@"fila:(\d+)\s*columna:(\d+)", RegexOptions.IgnoreCase);
 
-    var input = (Console.ReadLine() ?? "").Trim();
-    while (!regex.IsMatch(input)) {
-        Console.WriteLine("❌ Error: Entrada inválida. Inténtelo de nuevo con el formato correcto.");
-        input = (Console.ReadLine() ?? "").Trim();
+    while (true)
+    {
+        var input = (Console.ReadLine() ?? "").Trim();
+
+        if (!regex.IsMatch(input))
+        {
+            Console.WriteLine("❌ Formato inválido. Ejemplo: fila:5 columna:8");
+            continue;
+        }
+
+        var match = regex.Match(input);
+        var fila = int.Parse(match.Groups[1].Value);
+        var columna = int.Parse(match.Groups[2].Value);
+
+        if (fila < 4 || fila > 7 || columna < 5 || columna > 9)
+        {
+            Console.WriteLine("❌ Valores fuera de rango. Filas [4-7], Columnas [5-9]");
+            continue;
+        }
+
+        return new Configuracion() {
+            Fila = fila,
+            Columna = columna
+        };
     }
-
-    var match = regex.Match(input);
-    var fila = int.Parse(match.Groups[1].Value);
-    var columna = int.Parse(match.Groups[2].Value);
-
-    if (fila < 4 || fila > 7 || columna < 5 || columna > 9) {
-        Console.WriteLine("❌ Error: Los valores están fuera del rango permitido. Inténtelo de nuevo.");
-        return PedirConfiguracion();
-    }
-
-    return new Configuracion {
-        Fila = fila,
-        Columna = columna
-    };
 }
 
 
 
 
-const int TamañoFila = 5;
-const int TamañoColumna = 8;
 
 
 const double PrecioEntrada = 6.50;
 
-struct Posicion {
-    int fila;
-    int columna;
+public struct Posicion {
+    int Fila;
+    int Columna;
 }
 
 enum Butaca {
@@ -91,7 +133,7 @@ enum Menú {
     Salir
 }
 
-void MostrarMenuPrincipal(Butaca[,] sala) {
+void mostrarMenuPrincipal(Butaca[,] sala) {
     int opcion = 0;
     Menú opcionMenu = Menú.VerSala; // Inicialización para que esté disponible en el while
 
@@ -196,7 +238,7 @@ int obtenerIndiceFila(string letra) {
 
 
 void ocuparButaca(Butaca[,] sala, Posicion posicion) {
-    sala[posicion.fila, posicion.columna] = Butaca.Ocupada;
+    sala[posicion.Fila, posicion.Columna] = Butaca.Ocupada;
     Console.WriteLine("Butaca ocupada con éxito. Coste: " + PrecioEntrada + "€");
 }
 
@@ -212,9 +254,9 @@ bool hayButacaLibre(Butaca[,] sala) {
 }
 
 void comprarEntrada(Butaca[,] sala) {
-    if (!hayButacaLibre(sala) ) {
+    if (!hayButacaLibre(sala)) {
         Console.WriteLine("No Hay butacas libres");
-        return
+        return;
     }
 
     Console.WriteLine("Ingrese una butaca con el formato Letra:Número (por ejemplo: B:3)");
@@ -247,5 +289,48 @@ void comprarEntrada(Butaca[,] sala) {
 
 
 }
+
+void devolverEntrada(Butaca[,] sala) {
+    if (hayButacaLibre(sala)) {
+        Console.WriteLine("Hay butacas libres");
+        return;
+    }
+    
+    Console.WriteLine("Ingrese la butaca que quiere deolver con el formato Letra:Número (por ejemplo: B:3)");
+    var regex = new Regex(@"^([A-G]):(\d+)$");
+    var input = (Console.ReadLine() ?? "").Trim();
+    while (!regex.IsMatch(input)) {
+        Console.WriteLine("❌Error: formato incorrecto, vuelva a intentarlo");
+        input = (Console.ReadLine() ?? "").Trim();
+    }
+    
+    var match = regex.Match(input);
+    var fila = obtenerIndiceFila(match.Groups[1].Value);
+    var columna = int.Parse(match.Groups[2].Value);
+    
+    columna -= 1;
+    if (fila < 0 || fila >= sala.GetLength(0) || columna < 0 || columna >= sala.GetLength(1)) {
+        Console.WriteLine("❌ Posición fuera de rango");
+        return;
+    }
+
+    if (sala[fila, columna] == Butaca.Libre) {
+        Console.WriteLine("❌ No hay entrada que devolver. La butaca ya está libre.");
+    } else if (sala[fila, columna] == Butaca.Ocupada) {
+        sala[fila, columna] = Butaca.Libre;
+        Console.WriteLine("✅ Entrada devuelta con éxito.");
+    } else if (sala[fila, columna] == Butaca.FueraDeServicio) {
+        Console.WriteLine("Esta butaca está fuera de servivio, por favor eliga otra");
+    }
+    else {
+        Console.WriteLine("Entrada no valida");
+    }
+    
+    
+}
+
+
+
+
 
 
