@@ -82,7 +82,6 @@ Configuracion PedirConfiguracion() {
 
 
 
-const double PrecioEntrada = 6.50;
 
 struct Posicion {
     int Fila;
@@ -105,6 +104,9 @@ enum Menú {
     Informe, 
     Salir
 }
+
+
+
 
 void mostrarMenuPrincipal(Butaca[,] sala) {
     int opcion = 0;
@@ -164,6 +166,7 @@ void mostrarMenuPrincipal(Butaca[,] sala) {
     } while (opcionMenu != Menú.Salir);
 }
 
+const double PrecioEntrada = 6.50;
 
 void imprimirSala(Butaca[,] sala) {
     // Imprimir encabezado de columnas (una sola vez)
@@ -298,8 +301,24 @@ void devolverEntrada(Butaca[,] sala) {
     else {
         Console.WriteLine("Entrada no valida");
     }
+}
+
+
+void calcularRecaudacion(Butaca[,] sala) {
+    var contador = 0;
+
+    for (int i = 0; i < sala.GetLength(0); i++) {
+        for (int j = 0; j < sala.GetLength(1); j++) {
+            if (sala[i, j] == Butaca.Ocupada) {
+                contador++;
+            }
+        }
+    }
+    var recaudacionTotal = contador * PrecioEntrada; 
     
-    
+    Console.WriteLine("Numero de entradas vendidas: " + contador);
+    Console.WriteLine("Recaudación total: " + recaudacionTotal.ToString("F2") + " €");
+
 }
 
 
