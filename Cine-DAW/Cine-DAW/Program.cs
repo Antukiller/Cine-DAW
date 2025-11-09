@@ -18,7 +18,7 @@ Console.Clear();
 Console.Clear();
 
 // 0. Validación de la entrada del tamaño de la sala por argumentos
-var configuracion = ValidarArgumentosEntrada(args);
+var configuracion = ValidarArgumentos(args);
 
 // 1. Presentación del sistema
 Console.WriteLine("=============================================");
@@ -41,69 +41,42 @@ return;
 // ----------------------------------------------------
 // FUNCIONES Y PROCEDIMIENTOS AUXILIARES
 // ----------------------------------------------------
-
-Configuracion ValidarArgumentosEntrada(string[] args) {
-    if (args.Length != 2 || !args[0].StartsWith("fila:") || !args[1].StartsWith("columna:"))
-    {
-        Console.WriteLine("❌ Error: Debe ingresar dos argumentos con formato fila:X columna:Y");
+Configuracion ValidarArgumentos(string[] args) {
+    if (args.Length != 2) {
+        Console.WriteLine("Error los argumentos a ingresar son: Filas 4-7 Columnas 5-9");
         return PedirConfiguracion();
     }
-
-    var filaSplit = args[0].Split(':');
-    var columnaSplit = args[1].Split(':');
-
-    if (!int.TryParse(filaSplit[1], out var filaParsed) || filaParsed < 4 || filaParsed > 7)
-    {
-        Console.WriteLine("❌ Error: Fila fuera de rango [4-7]");
+    var filas = args[0];
+    if ((filas.Length < 4 || filas.Length > 7 || !int.TryParse(filas, out var filasParsed) || (filasParsed< 4 || filasParsed > 7))) {
+        Console.WriteLine($"Error: El argumento {args[0]} no es valido. Debe ser un numero de fila entre 4 y 7 incluidos");
         return PedirConfiguracion();
     }
-
-    if (!int.TryParse(columnaSplit[1], out var columnaParsed) || columnaParsed < 5 || columnaParsed > 9)
-    {
-        Console.WriteLine("❌ Error: Columna fuera de rango [5-9]");
+    var columnas = args[1];
+    if ((columnas.Length < 5 && columnas.Length > 9 || !int.TryParse(columnas, out var columnasParsed) || (columnasParsed< 5 || columnasParsed > 9))) {
+        Console.WriteLine($"Error: El argumento {args[1]} no es valido. Debe ser un numero de columnas entre 5 y 9 incluidos");
         return PedirConfiguracion();
     }
-
     return new Configuracion {
-        Fila = filaParsed,
-        Columna = columnaParsed
+        Filas = filasParsed,
+        Columna = columnasParsed
     };
 }
-
-Configuracion PedirConfiguracion()
-{
-    Console.WriteLine("--- Configuración de la Sala ---");
-    Console.WriteLine("Ingrese los parámetros con el formato: fila:X columna:Y");
-
-    var regex = new Regex(@"fila:(\d+)\s*columna:(\d+)", RegexOptions.IgnoreCase);
-
-    while (true)
-    {
-        var input = (Console.ReadLine() ?? "").Trim();
-
-        if (!regex.IsMatch(input))
-        {
-            Console.WriteLine("❌ Formato inválido. Ejemplo: fila:5 columna:8");
-            continue;
-        }
-
-        var match = regex.Match(input);
-        var fila = int.Parse(match.Groups[1].Value);
-        var columna = int.Parse(match.Groups[2].Value);
-
-        if (fila < 4 || fila > 7 || columna < 5 || columna > 9)
-        {
-            Console.WriteLine("❌ Valores fuera de rango. Filas [4-7], Columnas [5-9]");
-            continue;
-        }
-
-        return new Configuracion() {
-            Fila = fila,
-            Columna = columna
-        };
+Configuracion PedirConfiguracion() {
+    Console.WriteLine("-- Configuracion");
+    var regex = new Regex("^[4-7]{1}:[5-9]{1}$");
+    var input = (Console.ReadLine() ?? "").Trim();
+    while (!regex.IsMatch(input)) {
+        Console.WriteLine("Error: Entrada inválida. Inténtalo de nuevo. Formato correcto: Fila 4-7 Columnas 5-9]");
+        input = (Console.ReadLine() ?? "").Trim();
     }
+    var match = regex.Match(input);
+    var filas = int.Parse(args[0]);
+    var columnas = int.Parse(args[1]);
+    return new Configuracion {
+        Filas = filas,
+        Columna = columnas
+    };
 }
-
 
 
 
@@ -111,7 +84,7 @@ Configuracion PedirConfiguracion()
 
 const double PrecioEntrada = 6.50;
 
-public struct Posicion {
+struct Posicion {
     int Fila;
     int Columna;
 }
