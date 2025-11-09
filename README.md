@@ -44,6 +44,14 @@ Cada butaca tiene un estado y un precio fijo:
 
 #### Ejemplo de salida:
 
+    1   2   3   4   5   6   7   8
+A  [🟢] [🔴] [🟢] [🟢] [🚫] [🟢] [🟢] [🟢]
+B  [🟢] [🟢] [🟢] [🔴] [🟢] [🟢] [🚫] [🟢]
+C  [🟢] [🟢] [🟢] [🟢] [🟢] [🔴] [🟢] [🟢]
+D  [🟢] [🟢] [🚫] [🟢] [🟢] [🟢] [🟢] [🔴]
+E  [🟢] [🟢] [🟢] [🟢] [🟢] [🟢] [🟢] [🟢]
+
+
 
 
 ---
@@ -57,6 +65,10 @@ Cada butaca tiene un estado y un precio fijo:
 
 #### Ejemplos de interacción:
 
+Entrada: C:5
+✅ Coordenada válida. Procesando butaca C:5...
+Entrada: 5C
+❌ ERROR: Formato incorrecto. Use LETRA:NUMERO (ej. C:5)
 
 
 ---
