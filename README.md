@@ -43,13 +43,10 @@ Cada butaca tiene un estado y un precio fijo:
 - Coordenadas mixtas: **Filas con letras (A, B, C...)** y **Columnas con números (1, 2, 3...)**
 
 #### Ejemplo de salida:
-
-    1   2   3   4   5   6   7   8
-A  [🟢] [🔴] [🟢] [🟢] [🚫] [🟢] [🟢] [🟢]
-B  [🟢] [🟢] [🟢] [🔴] [🟢] [🟢] [🚫] [🟢]
-C  [🟢] [🟢] [🟢] [🟢] [🟢] [🔴] [🟢] [🟢]
-D  [🟢] [🟢] [🚫] [🟢] [🟢] [🟢] [🟢] [🔴]
-E  [🟢] [🟢] [🟢] [🟢] [🟢] [🟢] [🟢] [🟢]
+    1   2   3
+A  [🟢] [🔴] [🟢]
+B  [🚫] [🟢] [🔴]
+C  [🟢] [🚫] [🟢]
 
 
 
@@ -68,7 +65,7 @@ E  [🟢] [🟢] [🟢] [🟢] [🟢] [🟢] [🟢] [🟢]
 Entrada: C:5
 ✅ Coordenada válida. Procesando butaca C:5...
 Entrada: 5C
-❌ ERROR: Formato incorrecto. Use LETRA:NUMERO (ej. C:5)
+-❌ ERROR: Formato incorrecto. Use LETRA:NUMERO (ej. C:5)
 
 
 ---
