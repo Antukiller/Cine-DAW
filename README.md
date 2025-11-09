@@ -108,3 +108,6 @@ Abre el proyecto en Rider.
 Ejecuta el programa desde Program.cs.
 
 Interactúa con el menú por consola.
+
+📄 Licencia
+Este proyecto se distribuye bajo la licencia MIT. Puedes modificarlo y adaptarlo libremente.
