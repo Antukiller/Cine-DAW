@@ -149,3 +149,37 @@ void MostrarMenuPrincipal(Butaca[,] sala) {
     } while (opcionMenu != Menú.Salir);
 }
 
+
+void imprimirSala(Butaca[,] sala) {
+    // Imprimir encabezado de columnas (una sola vez)
+    Console.Write("   "); // espacio para la esquina
+    for (int j = 0; j < sala.GetLength(1); j++) {
+        Console.Write($"{j + 1,3}"); // columnas numeradas
+    }
+    Console.WriteLine();
+
+    // Imprimir cada fila con letra y símbolos
+    for (int i = 0; i < sala.GetLength(0); i++) {
+        char letraFila = (char)('A' + i); // convierte 0 → A, 1 → B, etc.
+        Console.Write($"{letraFila}  "); // letra de la fila
+
+        for (int j = 0; j < sala.GetLength(1); j++) {
+            switch (sala[i, j]) {
+                case Butaca.Libre:
+                    Console.Write("🟢 ");
+                    break;
+                case Butaca.Ocupada:
+                    Console.Write("🔴 ");
+                    break;
+                case Butaca.FueraDeServicio:
+                    Console.Write("🚫 ");
+                    break;
+                default:
+                    Console.Write("❓ ");
+                    break;
+            }
+        }
+        Console.WriteLine(); // salto de línea al final de la fila
+    }
+}
+
