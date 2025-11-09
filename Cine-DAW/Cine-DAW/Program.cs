@@ -183,3 +183,69 @@ void imprimirSala(Butaca[,] sala) {
     }
 }
 
+string obtenerLetra(int fila) {
+    const string filasLetras = "ABCDEFG";
+    return filasLetras[fila].ToString();
+}
+
+
+int obtenerIndiceFila(string letra) {
+    const string filasLetras = "ABCDEFG";
+    return filasLetras.IndexOf(letra.ToUpper());
+}
+
+
+void ocuparButaca(Butaca[,] sala, Posicion posicion) {
+    sala[posicion.fila, posicion.columna] = Butaca.Ocupada;
+    Console.WriteLine("Butaca ocupada con éxito. Coste: " + PrecioEntrada + "€");
+}
+
+
+bool hayButacaLibre(Butaca[,] sala) {
+    for (int fila = 0; fila < sala.GetLength(0); fila++) {
+        for (int columna = 0; columna < sala.GetLength(1); columna++) {
+            if (sala[fila, columna] == Butaca.Libre)
+                return true;
+        }
+    }
+    return false;
+}
+
+void comprarEntrada(Butaca[,] sala) {
+    if (!hayButacaLibre(sala) ) {
+        Console.WriteLine("No Hay butacas libres");
+        return
+    }
+
+    Console.WriteLine("Ingrese una butaca con el formato Letra:Número (por ejemplo: B:3)");
+
+
+    var regex = new Regex (@"^([A-G]):(\d+)$");
+    var input = (Console.ReadLine() ?? "");
+    while(!regex.IsMatch(input)) {
+        Console.WriteLine("❌Error: formato incorrecto, vuelva a intentarlo");
+        input = (Console.ReadLine() ?? "").Trim();
+    }
+
+    var match = regex.Match(input);
+    var fila = obtenerIndiceFila(match.Groups[1].Value);
+    var columna = int.Parse(match.Groups[2].Value);
+
+    columna -= 1;
+
+    if (fila < 0 || fila >= sala.GetLength(0) || columna < 0 || columna >= sala.GetLength(1)) {
+        Console.WriteLine("❌ Posición fuera de rango");
+        return;
+    }
+
+    if (sala[fila, columna] != Butaca.Libre) {
+        Console.WriteLine("❌ La butaca no está disponible");
+        return;
+    }
+
+    ocuparButaca(sala, new Posicion{fila = fila, columna = columna});
+
+
+}
+
+
