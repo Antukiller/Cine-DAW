@@ -25,12 +25,34 @@ Console.WriteLine("=============================================");
 Console.WriteLine("     🎬 INICIANDO SISTEMA CINE-DAM 🎟️       ");
 Console.WriteLine("=============================================");
 Console.WriteLine("Parámetros de la sala:");
-Console.WriteLine($"\t- Filas: {configuracion.Fila}");
-Console.WriteLine($"\t- Columnas: {configuracion.Columna}");
+Console.WriteLine($"\t- Filas: {configuracion.Filas}");
+Console.WriteLine($"\t- Columnas: {configuracion.Columnas}");
 Console.WriteLine();
 
 // 2. Creación de la sala
-var sala = new Butaca[configuracion.Fila, configuracion.Columna];
+var sala = new Butaca[configuracion.Filas, configuracion.Columnas];
+
+// Inicializar todas las butacas como Libres
+for (int i = 0; i < sala.GetLength(0); i++) {
+    for (int j = 0; j < sala.GetLength(1); j++) {
+        sala[i, j] = Butaca.Libre;
+    }
+}
+
+// Elegir aleatoriamente entre 1 y 3 butacas para poner FueraDeServicio
+int cantidadFueraServicio = random.Next(1, 4); // entre 1 y 3
+
+for (int k = 0; k < cantidadFueraServicio; k++) {
+    int filaAleatoria, columnaAleatoria;
+
+    do {
+        filaAleatoria = random.Next(0, sala.GetLength(0));
+        columnaAleatoria = random.Next(0, sala.GetLength(1));
+    } while (sala[filaAleatoria, columnaAleatoria] == Butaca.FueraDeServicio);
+
+    sala[filaAleatoria, columnaAleatoria] = Butaca.FueraDeServicio;
+}
+
 
 
 // 5. Finalización
@@ -58,7 +80,7 @@ Configuracion ValidarArgumentos(string[] args) {
     }
     return new Configuracion {
         Filas = filasParsed,
-        Columna = columnasParsed
+        Columnas = columnasParsed
     };
 }
 Configuracion PedirConfiguracion() {
@@ -74,18 +96,20 @@ Configuracion PedirConfiguracion() {
     var columnas = int.Parse(args[1]);
     return new Configuracion {
         Filas = filas,
-        Columna = columnas
+        Columnas = columnas
     };
 }
 
 
 
 
-
-
+struct Configuracion {
+    public int Filas;
+    public int Columnas;
+}
 struct Posicion {
-    int Fila;
-    int Columna;
+    public int Fila;
+    public int Columna;
 }
 
 enum Butaca {
@@ -104,8 +128,6 @@ enum Menú {
     Informe, 
     Salir
 }
-
-
 
 
 void mostrarMenuPrincipal(Butaca[,] sala) {
@@ -261,7 +283,7 @@ void comprarEntrada(Butaca[,] sala) {
         return;
     }
 
-    ocuparButaca(sala, new Posicion{fila = fila, columna = columna});
+    ocuparButaca(sala, new Posicion{Fila = fila, Columna = columna});
 
 
 }
@@ -304,7 +326,7 @@ void devolverEntrada(Butaca[,] sala) {
 }
 
 
-void calcularRecaudacion(Butaca[,] sala) {
+double calcularRecaudacion(Butaca[,] sala) {
     var contador = 0;
 
     for (int i = 0; i < sala.GetLength(0); i++) {
@@ -314,10 +336,52 @@ void calcularRecaudacion(Butaca[,] sala) {
             }
         }
     }
-    var recaudacionTotal = contador * PrecioEntrada; 
+    return contador * PrecioEntrada;
+}
+
+void verInforme(Butaca[,] sala) {
+    var contadorLibre = 0;
+    var contadorOcupada = 0;
+    var contadorFueraDeServicio = 0;
+    var total = 0;
+
+    for (int i = 0; i < sala.GetLength(0); i++) {
+        for (int j = 0; j < sala.GetLength(1); j++) {
+            if (sala[i, j] == Butaca.Libre) {
+                contadorLibre++;
+            }  else if (sala[i, j] == Butaca.Ocupada) {
+                contadorOcupada++;
+            } else if (sala[i, j] == Butaca.FueraDeServicio) {
+                contadorFueraDeServicio++;
+            }
+            else {
+                Console.WriteLine("No hay mas butacas");
+            }
+        }
+    }
     
-    Console.WriteLine("Numero de entradas vendidas: " + contador);
-    Console.WriteLine("Recaudación total: " + recaudacionTotal.ToString("F2") + " €");
+    total = sala.GetLength(0) * sala.GetLength(1);
+    double porcentajeOcupacion = (double)contadorOcupada / total * 100;
+    double porcentajeLibres = (double)contadorLibre / total * 100;
+    double porcentajeFueraServicio = (double)contadorFueraDeServicio / total * 100;
+    double recaudacion = calcularRecaudacion(sala);
+    
+    Console.WriteLine("\n📊 INFORME DE LA SALA");
+    Console.WriteLine("----------------------");
+    Console.WriteLine($"Total de butacas: {total}");
+    Console.WriteLine($"🟢 Libres: {contadorLibre}");
+    Console.WriteLine($"🔴 Ocupadas: {contadorOcupada}");
+    Console.WriteLine($"🚫 Fuera de servicio: {contadorFueraDeServicio}");
+    Console.WriteLine($"💰 Recaudación total: {recaudacion.ToString("F2")} €");
+    Console.WriteLine();
+    
+
+    Console.WriteLine("📈 Porcentaje de ocupación: " + porcentajeOcupacion.ToString("F2") + " %");
+    Console.WriteLine("📉 Porcentaje de butacas libres: " + porcentajeLibres.ToString("F2") + " %");
+    Console.WriteLine("⚠️ Porcentaje fuera de servicio: " + porcentajeFueraServicio.ToString("F2") + " %");
+    Console.WriteLine("\n✅ Informe generado correctamente.");
+
+    
 
 }
 
