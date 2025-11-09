@@ -19,8 +19,21 @@ Crear una solución modular que gestione una sala de cine mediante matrices, gar
 
 #### ✅ Ejemplos de Interacción
 
+Bienvenido a CINEMAD. ERROR: Faltan argumentos. Formato de ejecución: -filas:X -columnas:Y --- Modo Consola de Respaldo --- Introduzca las dimensiones de la sala (F:C). Rango permitido: [4-7]:[5-9]
 
+Code
 
+Entrada: 8,5 ERROR: Formato inválido. Use F:C. Ejemplo: 6:9 Introduzca de nuevo las dimensiones:
+
+Code
+
+Entrada: 3:5 ERROR: Rango inválido. Filas: [4-7], Columnas: [5-9] Introduzca de nuevo las dimensiones:
+
+Code
+
+Entrada: 5:8 Sala configurada: 5 filas x 8 columnas. Iniciando simulación...
+
+Code
 
 ---
 
@@ -40,16 +53,16 @@ Cada butaca tiene un estado y un precio fijo:
 
 ### 3. 🗺️ Visualización de la Sala
 
-- Coordenadas mixtas: **Filas con letras (A, B, C...)** y **Columnas con números (1, 2, 3...)**
+- Coordenadas mixtas: **Filas con letras (A, B, C)** y **Columnas con números (1, 2, 3)**
+- Cada símbolo representa el estado de una butaca:
+  - [🟢] → Libre
+  - [🔴] → Ocupada
+  - [🚫] → Fuera de servicio
 
 #### Ejemplo de salida:
-    1   2   3
-A  [🟢] [🔴] [🟢]
-B  [🚫] [🟢] [🔴]
-C  [🟢] [🚫] [🟢]
+1 2 3 A [🟢] [🔴] [🟢] B [🚫] [🟢] [🔴] C [🟢] [🚫] [🟢]
 
-
-
+Code
 
 ---
 
@@ -61,12 +74,17 @@ C  [🟢] [🚫] [🟢]
   - Coordenada dentro de los límites
 
 #### Ejemplos de interacción:
+Entrada: A-5 ERROR: Formato incorrecto. Use LETRA:NUMERO (ej. C:4) Introduzca butaca (ej. A:5):
 
-Entrada: C:5
-✅ Coordenada válida. Procesando butaca C:5...
-Entrada: 5C
--❌ ERROR: Formato incorrecto. Use LETRA:NUMERO (ej. C:5)
+Code
 
+Entrada: Z:9 ERROR: Coordenada fuera de los límites de la sala Introduzca butaca (ej. A:5):
+
+Code
+
+Entrada: C:2 ✅ Coordenada válida. Procesando butaca C:2...
+
+Code
 
 ---
 
@@ -85,8 +103,25 @@ El programa opera en un bucle con las siguientes opciones:
 
 #### Ejemplos de acciones:
 
+Butaca A:3 comprada con éxito. Precio: 6.50€
 
+Code
 
+ERROR: La butaca A:3 ya está OCUPADA o FUERA DE SERVICIO.
+
+Code
+
+Devolución completada. Butaca B:1 ahora está LIBRE.
+
+Code
+
+ERROR: La butaca B:1 no puede devolverse. No está OCUPADA.
+
+Code
+
+RECAUDACIÓN ACTUAL: 5 entradas * 6.50€ = 32.50€
+
+Code
 
 ---
 
@@ -101,8 +136,11 @@ La opción 5 genera un informe con:
 - Recaudación Total
 
 #### Ejemplo de salida:
+--- INFORME CINEMAD --- Entradas Vendidas: 5 Asientos Libres: 18 Asientos No Disponibles (F/S): 2 Ocupación: 21.74% (sobre 23 asientos disponibles) Recaudación Total: 32.50€
 
+Code
 
+---
 
 ## 🛠️ Tecnologías Utilizadas
 
